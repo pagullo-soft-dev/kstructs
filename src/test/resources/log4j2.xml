@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+LGPL v3.0
+Copyright (C) 2019 Pedro Agullo Soliveres
+p.agullo.soliveres@gmail.com
+
+KPointers is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 3 of the License, or (at your option) any later version.
+
+KPointers is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program; if not, write to the Free Software Foundation,
+Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-->
+
+<!-- 'status' specifies the *internal* Log4j2 logging level
+     'advertiser=multicastdns' allows us to advertise to log viewers
+            such as Chainsaw, and requires the jmnds Java library.
+            To advertise an appender, just see how the RollingFile does.
+-->
+<Configuration monitorInterval="2" status="WARN"
+   advertiser="">
+
+  <Properties>
+    <Property name="basePackage">com.softwarementors</Property>
+
+    <!-- STANDARD CONFIGURATION PER APP/TESTS -->
+    <Property name="projectMainPackage">${basePackage}.kstructs</Property>
+    <Property name="projectName">kstructs</Property>
+    <!-- End STANDARD CONFIGURATION PER APP/TESTS -->
+
+    <Property name="customDefaulAppender">%-5level [%t] %d{DEFAULT} %equals{%x }{[] }{}%equals{%X }{&#x7B;&#x7d; }{}%equals{>>%marker&lt;&lt; }{>>&lt;&lt; }{}%logger{36} - %msg%n</Property>
+    <Property name="logFilesBaseDir">.</Property>
+    <Property name="logDir">logs/log4j2</Property>
+    <Property name="justLogFileName">${projectName}</Property>
+    <Property name="justFullLogFileName">${logFilesBaseDir}/${logDir}/${justLogFileName}</Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="console" target="SYSTEM_OUT">
+      <PatternLayout pattern="${customDefaulAppender}"/>
+    </Console>
+    <File name="defaultLogFile" 
+          fileName="${justFullLogFileName}.log" 
+          bufferSize="0" bufferedIO="false"> 
+      <PatternLayout pattern="${customDefaulAppender}"/>
+    </File>     </Appenders>
+  
+  <Loggers>
+    <Root level="WARN">
+      <AppenderRef ref="console"/>
+      <AppenderRef ref="defaultLogFile"/>
+    </Root>
+    
+    <!-- Base packages -->
+    <logger name="${basePackage}" level="INFO">
+    </logger> 
+
+    <!-- App/library/test specific package -->
+    <logger name="${projectMainPackage}" level="ALL">
+    </logger>     
+  </Loggers>
+</Configuration>
