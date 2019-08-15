@@ -32,14 +32,13 @@ class ShortStringAllocator(private val rawAllocator : RawAllocator) {
       val unsafeAllocator = ShortStringAllocator( UnsafeBackedAllocator())      
    }
    
-   fun allocate( maxLen: UByte, zeroMem: Boolean = StructsArrayAllocator.zeroMem ): ShortString {
+   fun allocate( maxLen: UByte, zeroMem: Boolean = StructArrayAllocator.zeroMem ): ShortString {
       val memSize = maxLen.toLong() + ShortString.NON_STR_BYTES.toLong()
       val mem = this.rawAllocator.allocate(memSize, zeroMem)
       
-      // Ugly, but we can't have internal access from a different package, so...
+      // Initialize to valid empty string
       val r = ShortString(mem)
-      r.lengthPtr.it = 0.toUByte()
-      r.maxLenPtr.it = maxLen
+      r.initializeMem(maxLen)
       return r
    }
    

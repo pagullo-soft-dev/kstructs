@@ -1,0 +1,6 @@
+{
+   "projectNameInLicense" : "ExampleProject",
+   "package" : "examplepkg",
+   "type" : "RegionPointer",
+   "pointedType" : "Region"
+}

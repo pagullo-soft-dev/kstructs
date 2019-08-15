@@ -162,7 +162,7 @@ tasks {
          // Must follow the events property assignment!
          showStandardStreams = false
          showStackTraces = true
-         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT // FULL for complete stack trace
+         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL // FULL for complete stack trace
       }
    }
 }

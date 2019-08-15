@@ -4,11 +4,9 @@
 
 - Publish blog about KStructs in personal blog
 
-- Publish to JCenter repository: see [https://reflectoring.io/bintray-jcenter-maven-central/](https://reflectoring.io/bintray-jcenter-maven-central/)
-
-- Añadir soporte para publicación en sitio backup
-
 ## Important
+
+- Publish to JCenter repository: see [https://reflectoring.io/bintray-jcenter-maven-central/](https://reflectoring.io/bintray-jcenter-maven-central/)
 
 - Do FAQ: might be cut&paste of the one for KPointers
 
@@ -24,4 +22,4 @@
 
 - Move utils.Math.kt to some general place, has tests
 
-- Move isValidIdentifier, has tests and very exhaustive
+- Move isValidIdentifier to some general place, has tests and very exhaustive

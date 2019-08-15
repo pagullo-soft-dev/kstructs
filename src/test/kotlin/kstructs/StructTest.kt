@@ -154,4 +154,29 @@ class StructTest {
       assertNull( struct.getByteField("ff"))
       assertNotNull( struct.getByteField("bf"))
    }
+   
+   @Test
+   fun test_shortStringSupport() {
+      val strLen = 2.toUByte()
+      val struct : Struct = Structs().add("s")
+      val padBegin = struct.addByte("padBegin")
+      val sf = struct.addShortString("str", strLen)
+      val padEnd = struct.addByte("padEnd")
+      struct.commit()
+      val strBytesOffset = sf.offset + ShortString.NON_STR_BYTES
+      
+      assertEquals( 0L, padBegin.offset )
+      assertEquals( Byte.SIZE_BYTES.toLong(), sf.offset )
+      assertEquals( (sf.sizeBytes + padBegin.sizeBytes).toLong(), padEnd.offset )
+      
+      val struct1 = StructArrayAllocator.unsafeAllocator.allocateArray(struct, 1L)
+      struct1.set(padBegin, 127.toByte())
+      struct1.set(sf, "ab")
+      struct1.set(padEnd, 129.toByte())
+      val struct1Address = struct1.toPointer()
+      assertEquals( 127.toByte(), BytePointer(struct1Address + padBegin.offset).it)
+      assertEquals( 'a'.toByte(), BytePointer(struct1Address + strBytesOffset).it)
+      assertEquals( 'b'.toByte(), BytePointer(struct1Address + strBytesOffset+1).it)
+      assertEquals( 129.toByte(), BytePointer(struct1Address + padEnd.offset).it)
+   }
 }

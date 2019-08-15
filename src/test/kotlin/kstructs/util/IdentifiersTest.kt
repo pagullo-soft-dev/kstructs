@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.AfterEach
-import com.softwarementors.kstructs.StructsArrayAllocator
+import com.softwarementors.kstructs.StructArrayAllocator
 import com.softwarementors.kstructs.*
 import com.softwarementors.kpointers.BytePointer
 import com.softwarementors.kpointers.Size

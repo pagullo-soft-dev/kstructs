@@ -89,6 +89,18 @@ class Struct(val name: String, val structs: Structs ) {
       fields_.add(f)
    }
    
+   fun addShortString(name : String, maxLen : UByte) : ShortStringField {
+      assert(!committed)
+      assert(isValidIdentifier(name))
+      assert(!hasField(name))
+
+      val sizeBytes = ShortString.sizeBytes(maxLen)
+      val offset = allocateField( sizeBytes, alignment=1)
+      val field = ShortStringField(name, offset, maxLen)
+      addField(field)
+      return field
+   }
+   
    fun addByte(name : String) : ByteField {
       assert(!committed)
       assert(isValidIdentifier(name))
@@ -257,6 +269,15 @@ class Struct(val name: String, val structs: Structs ) {
       return fields_.find { it.name == name && (it.dataType == type) }
    }
          
+   public fun getShortStringField(name: String) : ShortStringField? {
+      assert( isValidIdentifier(name))
+      val field = fields_.find { it.name == name && it.dataType == Byte::class}
+      if( field == null ) {
+         return null
+      }
+      return field as ShortStringField
+   }
+   
    public fun getByteField(name: String) : ByteField? {
       assert( isValidIdentifier(name))
       val field = fields_.find { it.name == name && it.dataType == Byte::class}
@@ -390,5 +411,18 @@ class Struct(val name: String, val structs: Structs ) {
       // mem = toDebugString(memory)
       
       return firstCandidateByte
-   }  
+   }
+   
+   internal fun initializeMemory( v: StructPointer ) {
+      assert( v.struct == this)
+      
+      fields.forEach {
+         // For ShortStrings, initilize them to valid empty string
+         if( it.dataType == ShortString::class) {
+            val f = it as ShortStringField
+            val s = v[f]
+            s.initializeMem(f.maxLen)
+         }
+      }
+   }
 }

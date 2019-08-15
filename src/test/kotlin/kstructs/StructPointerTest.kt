@@ -56,7 +56,7 @@ class StructPointerTest {
    @Test
    fun test_access() {
       var itemCount = 100L
-      val array = StructsArrayAllocator.unsafeAllocator.allocateArray(struct1, itemCount)
+      val array = StructArrayAllocator.unsafeAllocator.allocateArray(struct1, itemCount)
       try {
          array[byteField] = 98
 
@@ -66,14 +66,14 @@ class StructPointerTest {
          assertEquals( 98, array[byteField])
       }
       finally {
-         StructsArrayAllocator.unsafeAllocator.free(array)
+         StructArrayAllocator.unsafeAllocator.free(array)
       }
     }
    
    @Test
    fun test_indexedAccess() {
       var itemCount = 100L
-      val array = StructsArrayAllocator.unsafeAllocator.allocateArray(struct1, itemCount)
+      val array = StructArrayAllocator.unsafeAllocator.allocateArray(struct1, itemCount)
       try {
          var current = array
          for( i in 0 until itemCount) {
@@ -88,7 +88,7 @@ class StructPointerTest {
          }         
       }
       finally {
-         StructsArrayAllocator.unsafeAllocator.free(array)
+         StructArrayAllocator.unsafeAllocator.free(array)
       }
    }
    

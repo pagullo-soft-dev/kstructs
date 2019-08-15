@@ -26,15 +26,17 @@ import com.softwarementors.kpointers.Size
 import com.softwarementors.kstructs.*
 
 @kotlin.ExperimentalUnsignedTypes
-class StructsArrayAllocator( internal val rawAllocator : RawAllocator) {
+class StructArrayAllocator( internal val rawAllocator : RawAllocator) {
    companion object {
-      val zeroMem = RawAllocator.zeroMem
-      val unsafeAllocator = StructsArrayAllocator(UnsafeBackedAllocator())
+      val zeroMem = true
+      val unsafeAllocator = StructArrayAllocator(UnsafeBackedAllocator())
    }
    
-   fun allocateArray( struct: Struct, itemCount: Size, zeroMem: Boolean = StructsArrayAllocator.zeroMem ): StructPointer {
-      val r = this.rawAllocator.allocate(struct.sizeBytes, itemCount, zeroMem)
-      return StructPointer(r,struct)
+   fun allocateArray( struct: Struct, itemCount: Size, zeroMem: Boolean = StructArrayAllocator.zeroMem ): StructPointer {
+      val mem = this.rawAllocator.allocate(struct.sizeBytes, itemCount, zeroMem)
+      val r = StructPointer(mem,struct)
+      struct.initializeMemory(r)
+      return r
    }
    
    fun free( pointerToArray: StructPointer) {

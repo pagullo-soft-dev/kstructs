@@ -53,6 +53,10 @@ inline class ShortString constructor(internal val address: Pointer) {
          return v <= MAX_LENGTH.toUByte()
       }
       
+      fun sizeBytes(maxLen: UByte): Long {
+         val r = maxLen.toLong() + NON_STR_BYTES
+         return r
+      }
    }
    
    // ******************************************
@@ -144,5 +148,16 @@ inline class ShortString constructor(internal val address: Pointer) {
       for( i in 0 until len) {
          bytes[i.toLong()] = s[i].toByte().toUByte()
       }
-   }   
+   }
+   
+   internal fun initializeMem( maxLen: UByte) {
+      assert( !isMemInitialized())
+            
+      maxLenPtr.it = maxLen
+      lengthPtr.it = 0.toUByte()
+   }
+   
+   internal fun isMemInitialized() : Boolean {
+      return address != NULL && maxLen > 0.toUByte()
+   }
 }

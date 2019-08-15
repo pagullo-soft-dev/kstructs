@@ -30,7 +30,21 @@ class StructPointer(internal val address: Pointer, val struct: Struct) {
 
    fun isNull(): Boolean = address == NULL
    operator fun not() = address == NULL
-   
+
+   operator fun get(field: ShortStringField): ShortString {
+      assert( struct.hasField(field))
+      
+      val r = ShortString(address + field.offset)
+      return r
+   }
+      
+   operator fun set(field: ShortStringField, v: String) {
+      assert( struct.hasField(field))
+      
+      val r = ShortString(address + field.offset)
+      r.set(v)
+   }
+      
    operator fun get(field: ByteField): Byte {
       assert( struct.hasField(field))
       

@@ -1,0 +1,31 @@
+{
+   "projectNameInLicense" : "ExampleProject",
+   "package" : "examplepkg",
+   "type" : "Region",
+   "sizeBytes" : 186,
+      "otherImports" : [
+   ],
+   "fields" : [
+      {
+         "name" : "key",
+         "type" : "Int",
+         "offset" : 0
+      }
+   ],
+   "inlineFields" : [
+      {
+         "name" : "name",
+         "type" : "ShortString",
+         "offset" : 4,
+         "size" : 25,
+         "sizeBytes" : "25+2"
+      },
+      {
+         "name" : "comment",
+         "type" : "ShortString",
+         "offset" : 31,
+         "size": 153,
+         "sizeBytes" : "153+2"
+      }
+   ]   
+}

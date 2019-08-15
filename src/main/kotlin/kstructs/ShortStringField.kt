@@ -20,10 +20,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package com.softwarementors.kstructs
 
-import com.softwarementors.kpointers.Size
-
-@kotlin.ExperimentalUnsignedTypes
-class ShortStringField internal constructor(name: String, offset: Long, val maxLen : UByte )
-   : Field<ShortString>(name, offset, ShortString.sizeBytes(maxLen.toUByte()), ShortString::class)
+class ShortField internal constructor(name: String, offset: Long )
+   : Field<Short>(name, offset, Short.SIZE_BYTES.toLong(), Short::class)
 {
 }

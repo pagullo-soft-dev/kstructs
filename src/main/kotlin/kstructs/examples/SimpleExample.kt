@@ -37,7 +37,7 @@ fun main( args : Array<String> ) {
    myStruct.commit()
    
    val itemCount = 5L
-   val data = StructsArrayAllocator.unsafeAllocator.allocateArray(myStruct, itemCount)
+   val data = StructArrayAllocator.unsafeAllocator.allocateArray(myStruct, itemCount)
    try {
       for( i in 0L until itemCount) {
          data[bf, i] = i.toByte()
@@ -54,7 +54,7 @@ fun main( args : Array<String> ) {
       }      
    }
    finally {
-      StructsArrayAllocator.unsafeAllocator.free(data)
+      StructArrayAllocator.unsafeAllocator.free(data)
    }
    
 }
