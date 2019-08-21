@@ -24,23 +24,24 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.AfterEach
-import com.softwarementors.kpointers.malloc.unsafeAllocator
 import com.softwarementors.kpointers.impl.unsafe
 import com.softwarementors.kpointers.*
+import com.softwarementors.kpointers.PrimitiveArraysAllocator
+
 
 @kotlin.ExperimentalUnsignedTypes
 class StructTest {
 
    val outstandingAllocations = mutableListOf<BytePointer>()
    fun allocArray100() : BytePointer {
-      val r = unsafeAllocator.allocateBytePointerArray(100)
+      val r = PrimitiveArraysAllocator.unsafeAllocator.allocateBytePointerArray(100)
       outstandingAllocations.add(r)
       return r
    }
       
    @AfterEach
    fun afterEach() {
-      outstandingAllocations.forEach { unsafeAllocator.free(it)}
+      outstandingAllocations.forEach { PrimitiveArraysAllocator.unsafeAllocator.free(it)}
    }
    
    @Test
@@ -50,7 +51,8 @@ class StructTest {
       struct.commit()
       
       assertEquals(0L, bf.offset)
-      assertEquals(1L, bf.sizeBytes)
+      val sb = bf.sizeBytes
+      assertEquals(1L, sb)
    }
    
    @Test
@@ -95,16 +97,17 @@ class StructTest {
       assertEquals(28L, i2.offset)
       assertEquals( 40L, struct.sizeBytes)
       assertEquals( 37L, struct.usableBytes)
-      assertEquals( 1L, struct.alignment)
+      assertTrue( struct.sizeBytes % MIN_MEM_ALIGNMENT == 0L)
    }
 
    @Test
    fun test_emptyStruct() {
       var struct : Struct = Structs().add("s")
       struct.commit()
-      assertEquals( 0L, struct.alignment)
+      assertEquals( 0L, 0)
       assertEquals( 0L, struct.sizeBytes)
       assertEquals( 0L, struct.usableBytes)
+      assertTrue( struct.sizeBytes % MIN_MEM_ALIGNMENT == 0L)
    }
    
    @Test
@@ -113,33 +116,33 @@ class StructTest {
       struct.addFloat("ff")
       struct.addByte("bf")
       struct.commit()
-      assertEquals( 4L, struct.alignment)
       assertEquals( 8L, struct.sizeBytes)
       assertEquals( 5L, struct.usableBytes)
+      assertTrue( struct.sizeBytes % MIN_MEM_ALIGNMENT == 0L)
       
       struct = Structs().add("s")
       struct.addByte("bf")
       struct.addFloat("ff")
       struct.commit()
-      assertEquals( 1L, struct.alignment)
       assertEquals( 8L, struct.sizeBytes)
       assertEquals( 5L, struct.usableBytes)
+      assertTrue( struct.sizeBytes % MIN_MEM_ALIGNMENT == 0L)
 
       struct = Structs().add("s")
       struct.addByte("bf")
       struct.addUShort("usf")
       struct.commit()
-      assertEquals( 1L, struct.alignment)
-      assertEquals( 4L, struct.sizeBytes)
+      assertEquals( 8L, struct.sizeBytes)
       assertEquals( 3L, struct.usableBytes)
+      assertTrue( struct.sizeBytes % MIN_MEM_ALIGNMENT == 0L)
 
       struct = Structs().add("s")
       struct.addUShort("usf")
       struct.addByte("bf")
       struct.commit()
-      assertEquals( 2L, struct.alignment)
-      assertEquals( 4L, struct.sizeBytes)
+      assertEquals( 8L, struct.sizeBytes)
       assertEquals( 3L, struct.usableBytes)
+      assertTrue( struct.sizeBytes % MIN_MEM_ALIGNMENT == 0L)
    }
    
    @Test

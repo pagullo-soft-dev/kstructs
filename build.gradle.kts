@@ -32,6 +32,8 @@ val junitVer = "5.4.0"
 val junitPlatformLauncherVer = "1.4.0"
 val kotlinJunitTestRunnerVer = "3.3.2"
 
+val kpointersVer = "alpha-1-SNAPSHOT"
+
 buildscript {
    repositories {   
       jcenter()
@@ -96,7 +98,7 @@ dependencies {
       testRuntimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:$log4j2Ver")
    }
 
-   implementation("com.softwarementors.kpointers:kpointers:beta-1-SNAPSHOT")
+   implementation("com.softwarementors.kpointers:kpointers:$kpointersVer")
 }
 
 if( supportEclipseJUnitWorkaround ) {

@@ -20,4 +20,4 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package com.softwarementors.kstructs
 
-
+const val MIN_MEM_ALIGNMENT = 8L

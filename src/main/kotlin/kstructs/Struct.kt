@@ -30,7 +30,7 @@ import kotlin.reflect.KClass
 @kotlin.ExperimentalUnsignedTypes
 class Struct(val name: String, val structs: Structs ) {
    companion object {
-      internal val structs = Structs()
+      val structs = Structs()
    }
    
    // Allocated memory: every byte is represented with a bit, 1 meaning that byte
@@ -72,8 +72,8 @@ class Struct(val name: String, val structs: Structs ) {
       if( fields_.isEmpty()) {
          return 0
       }
-      val r = fields_[0].alignment
-      return r
+      // val r = fields_[0].alignment
+      return MIN_MEM_ALIGNMENT
    }
       
    fun commit() {
@@ -379,7 +379,9 @@ class Struct(val name: String, val structs: Structs ) {
       
    private fun allocateField( sizeBytes : Size, alignment : Size ) : Long {
       // @DEBUG
-      // var mem = toDebugString(memory)
+      // var mem
+      // mem = toDebugString(memory)
+      // var lastBit = memory.length() -1
       
       usableBytes_ += sizeBytes
       var firstCandidateByte = memory.nextClearBit(0).toLong()
@@ -389,7 +391,7 @@ class Struct(val name: String, val structs: Structs ) {
          // Try to find a block of free memory (consecutive 0 bits) in existing
          // memory
          val nextByteAllocated = memory.nextSetBit(firstCandidateByte.toInt())
-         val noMoreMemoryAvailable = nextByteAllocated < 0
+         val noMoreMemoryAvailable = nextByteAllocated < 0 || lastCandidateByte >= memory.length()
          if( noMoreMemoryAvailable) {
             firstCandidateByte = roundUp(memory.length().toLong(), alignment)
             lastCandidateByte = firstCandidateByte + sizeBytes - 1
@@ -400,7 +402,7 @@ class Struct(val name: String, val structs: Structs ) {
             break;
          }
 
-         firstCandidateByte = roundUp(memory.nextClearBit(firstCandidateByte.toInt()).toLong(),alignment)
+         firstCandidateByte = roundUp(memory.nextClearBit(lastCandidateByte.toInt()).toLong(),alignment)
          lastCandidateByte = firstCandidateByte + sizeBytes  - 1 
       } while( true )
 
@@ -421,7 +423,7 @@ class Struct(val name: String, val structs: Structs ) {
          if( it.dataType == ShortString::class) {
             val f = it as ShortStringField
             val s = v[f]
-            s.initializeMem(f.maxLen)
+            s.unsafeInitializeMemory(f.maxLen)
          }
       }
    }

@@ -38,7 +38,7 @@ class ShortStringAllocator(private val rawAllocator : RawAllocator) {
       
       // Initialize to valid empty string
       val r = ShortString(mem)
-      r.initializeMem(maxLen)
+      r.unsafeInitializeMemory(maxLen)
       return r
    }
    

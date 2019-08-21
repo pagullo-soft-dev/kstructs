@@ -26,7 +26,7 @@ import com.softwarementors.kpointers.Size
 import com.softwarementors.kstructs.*
 
 @kotlin.ExperimentalUnsignedTypes
-class StructArrayAllocator( internal val rawAllocator : RawAllocator) {
+class StructArrayAllocator( val rawAllocator : RawAllocator) {
    companion object {
       val zeroMem = true
       val unsafeAllocator = StructArrayAllocator(UnsafeBackedAllocator())

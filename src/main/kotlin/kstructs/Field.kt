@@ -24,7 +24,7 @@ import com.softwarementors.kpointers.Size
 import kotlin.reflect.KClass
 import com.softwarementors.kstructs.util.isValidIdentifier
 
-abstract class Field<T> protected constructor (val name: String, internal val offset: Long, val sizeBytes: Size, val dataType : KClass<T>) where T: Any
+abstract class Field<T> protected constructor (val name: String, val offset: Long, val sizeBytes: Size, val dataType : KClass<T>) where T: Any
 {
    val alignment : Size get() = sizeBytes
    

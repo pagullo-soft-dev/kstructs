@@ -139,6 +139,15 @@ inline class ShortString constructor(internal val address: Pointer) {
       return toString(DEFAULT_CHARSET)
    }
    
+   fun contains(v: String): Boolean {
+      val r = toString().contains(v)
+      return r
+   }
+   
+   fun startsWith(v: String): Boolean {
+      return toString().contains(v)
+   }
+   
    fun set(s: String) {
       assert( !isNull() )
       assert( stringIsValid(s))
@@ -150,14 +159,8 @@ inline class ShortString constructor(internal val address: Pointer) {
       }
    }
    
-   internal fun initializeMem( maxLen: UByte) {
-      assert( !isMemInitialized())
-            
+   public/*=internal*/ fun unsafeInitializeMemory( maxLen: UByte) {
       maxLenPtr.it = maxLen
       lengthPtr.it = 0.toUByte()
-   }
-   
-   internal fun isMemInitialized() : Boolean {
-      return address != NULL && maxLen > 0.toUByte()
    }
 }
