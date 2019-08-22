@@ -100,7 +100,7 @@ class Struct(val name: String, val structs: Structs ) {
       addField(field)
       return field
    }
-   
+
    fun addByte(name : String) : ByteField {
       assert(!committed)
       assert(isValidIdentifier(name))
@@ -414,7 +414,192 @@ class Struct(val name: String, val structs: Structs ) {
       
       return firstCandidateByte
    }
+
+   fun isMemoryAllocated( position: Size, size: Size): Boolean {
+      assert( position >= 0)
+      assert( size > 0 )
+      
+      if( memory.get(position.toInt())) {
+         return true
+      }
+      val lastSet = memory.nextSetBit(position.toInt()+1)
+      if( lastSet < 0) {
+         return false       
+      }
+      if( lastSet < position + size) {
+         return true
+      }
+      return false
+   }
+     
+   fun addBooleanAt(name: String, position: Size): BooleanField {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = 1L
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = BooleanField(name, position.toLong())
+      addField(field)
+      return field
+   }
+      
+   fun addByteAt(name: String, position: Size): ByteField {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = Byte.SIZE_BYTES.toLong()
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = ByteField(name, position.toLong())
+      addField(field)
+      return field
+   }
+      
+   fun addUByteAt(name: String, position: Size): UByteField {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = UByte.SIZE_BYTES.toLong()
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = UByteField(name, position.toLong())
+      addField(field)
+      return field
+   }
    
+   fun addCharAt(name: String, position: Size): CharField {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = Char.SIZE_BYTES.toLong()
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = CharField(name, position.toLong())
+      addField(field)
+      return field
+   }
+      
+
+   fun addShortAt(name: String, position: Size): ShortField {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = Short.SIZE_BYTES.toLong()
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = ShortField(name, position.toLong())
+      addField(field)
+      return field
+   }
+      
+   
+   fun addUShortAt(name: String, position: Size): UShortField {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = UShort.SIZE_BYTES.toLong()
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = UShortField(name, position.toLong())
+      addField(field)
+      return field
+   }
+      
+   fun addIntAt(name: String, position: Size): IntField {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = Int.SIZE_BYTES.toLong()
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = IntField(name, position.toLong())
+      addField(field)
+      return field
+   }
+      
+   fun addUIntAt(name: String, position: Size): UIntField {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = UInt.SIZE_BYTES.toLong()
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = UIntField(name, position.toLong())
+      addField(field)
+      return field
+   }
+      
+   fun addLongAt(name: String, position: Size): LongField {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = Long.SIZE_BYTES.toLong()
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = LongField(name, position.toLong())
+      addField(field)
+      return field
+   }   
+   
+   fun addULongAt(name: String, position: Size): ULongField {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = ULong.SIZE_BYTES.toLong()
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = ULongField(name, position.toLong())
+      addField(field)
+      return field
+   }
+      
+   fun addFloatAt(name: String, position: Size): FloatField {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = 4L
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = FloatField(name, position.toLong())
+      addField(field)
+      return field
+   }
+      
+   fun addDoubleAt(name: String, position: Size) {
+      // NO alignment check: the user might even receive unaligned data that might be
+      // legally (though slowly) accessible when unaligned. It is his responsibility
+      
+      val size = 8L
+      assert( !isMemoryAllocated(position, size))
+      
+      allocateFieldAt( position, size)
+      val field = DoubleField(name, position.toLong())
+      addField(field)
+   }
+   
+   private fun allocateFieldAt( position: Size, size: Size) {
+      assert( !isMemoryAllocated(position, size))
+      
+      
+      // @DEBUG
+      // var mem = toBinaryDebugString(memory)
+      memory.set( position.toInt(), (position+size).toInt(), true)
+      // @DEBUG
+      // mem = toBinaryDebugString(memory)
+   }
+     
    internal fun initializeMemory( v: StructPointer ) {
       assert( v.struct == this)
       
@@ -426,5 +611,9 @@ class Struct(val name: String, val structs: Structs ) {
             s.unsafeInitializeMemory(f.maxLen)
          }
       }
+   }
+   
+   internal fun toBinaryDebugString(): String {
+      return com.softwarementors.kstructs.debug.toBinaryDebugString(memory)
    }
 }

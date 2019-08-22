@@ -2,10 +2,10 @@ package com.softwarementors.kstructs.debug
 
 import java.util.BitSet
 
-fun toDebugString( b: BitSet): String {
+fun toBinaryDebugString( b: BitSet): String {
    val r = StringBuffer(b.length() + 8)
-   r.append(b.length())
-   r.append(':')
+   // r.append(b.length())
+   //r.append(':')
    for( i in 0..b.length()-1) {
       var bit = '0'
       if( b.get(i) ) {

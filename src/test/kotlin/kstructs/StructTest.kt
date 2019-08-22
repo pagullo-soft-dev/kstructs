@@ -31,18 +31,6 @@ import com.softwarementors.kpointers.PrimitiveArraysAllocator
 
 @kotlin.ExperimentalUnsignedTypes
 class StructTest {
-
-   val outstandingAllocations = mutableListOf<BytePointer>()
-   fun allocArray100() : BytePointer {
-      val r = PrimitiveArraysAllocator.unsafeAllocator.allocateBytePointerArray(100)
-      outstandingAllocations.add(r)
-      return r
-   }
-      
-   @AfterEach
-   fun afterEach() {
-      outstandingAllocations.forEach { PrimitiveArraysAllocator.unsafeAllocator.free(it)}
-   }
    
    @Test
    fun test_allocateSingle() {
@@ -181,5 +169,69 @@ class StructTest {
       assertEquals( 'a'.toByte(), BytePointer(struct1Address + strBytesOffset).it)
       assertEquals( 'b'.toByte(), BytePointer(struct1Address + strBytesOffset+1).it)
       assertEquals( 129.toByte(), BytePointer(struct1Address + padEnd.offset).it)
+   }
+   
+   @Test
+   fun test_isMemoryAllocated() {
+      val struct : Struct = Structs().add("s")
+      assertFalse( struct.isMemoryAllocated(0,1))
+      assertFalse( struct.isMemoryAllocated(1_000_000,1_000_000))
+      struct.addByteAt( "b1", 3)
+
+      var mem : String = struct.toBinaryDebugString()
+      assert( "0001" == mem )
+      assertTrue( struct.isMemoryAllocated(3,1))
+      assertTrue( struct.isMemoryAllocated(2,2))
+      assertFalse( struct.isMemoryAllocated(2,1))
+      assertTrue( struct.isMemoryAllocated(3,2))
+      assertTrue( struct.isMemoryAllocated(2,3))
+      assertFalse( struct.isMemoryAllocated(1,2))
+      assertFalse( struct.isMemoryAllocated(0,3))
+      assertTrue( struct.isMemoryAllocated(0,4))
+      assertTrue( struct.isMemoryAllocated(3,3))
+      assertFalse( struct.isMemoryAllocated(4,1))
+      
+      struct.addFloatAt("f1", 8)
+      mem = struct.toBinaryDebugString()
+      assert( "000100001111" == mem )
+      assertTrue( struct.isMemoryAllocated(8,1))
+      assertFalse( struct.isMemoryAllocated(12,1))
+      assertTrue( struct.isMemoryAllocated(9,1))
+      assertTrue( struct.isMemoryAllocated(11,1))
+      assertTrue( struct.isMemoryAllocated(8,4))
+      assertFalse( struct.isMemoryAllocated(5,3))
+      assertTrue( struct.isMemoryAllocated(5,4))
+   }
+   
+   @Test
+   fun test_addXxxAt() {
+      val struct : Struct = Structs().add("s")
+      val b1 = struct.addByteAt( "b1", 0)
+      val l1 = struct.addLongAt( "l1", 8)
+      val f1 = struct.addFloatAt( "f1", 16)
+      val bool1 = struct.addBooleanAt( "bool1", 20)
+      struct.commit()
+      val sp : StructPointer = StructArrayAllocator.unsafeAllocator.allocateArray( struct, 2, true )
+      var s1 = sp
+      s1[b1] = 17.toByte()
+      s1[l1] = 19898L
+      s1[f1] = 3.23f
+      s1[bool1] = true
+      assertEquals( 17.toByte(), BytePointer(s1.address + 0).it )
+      assertEquals( 19898L, LongPointer(s1.address +8).it )
+      assertEquals( 3.23f, FloatPointer(s1.address + 16).it )
+      val bool1Val = BooleanPointer(s1.address + 20).it
+      assertEquals( true, bool1Val )
+      
+      var structSize = struct.sizeBytes
+      assertEquals(24, structSize)
+      s1[b1, 1] = 99.toByte()
+      s1[l1, 1] = 987L
+      s1[f1, 1] = 89.9f
+      s1[bool1, 1] = true
+      assertEquals( 99.toByte(), BytePointer(s1.address + structSize + 0).it )
+      assertEquals( 987L, LongPointer(s1.address + structSize + 8).it )
+      assertEquals( 89.9f, FloatPointer(s1.address + structSize + 16).it )
+      assertEquals( true, BooleanPointer(s1.address + structSize + 20).it )
    }
 }
