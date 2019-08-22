@@ -24,7 +24,7 @@ val supportEclipseJUnitWorkaround = false
 val supportEclipseJUnitRunners = true
 
 group = "com.softwarementors.${rootProject.name}"
-version = "alpha-1-SNAPSHOT"
+version = "0.2-alpha-SNAPSHOT"
 
 val log4j2Ver = "2.11.2"
 val log4jKotlinApiVer = "1.0.0"
