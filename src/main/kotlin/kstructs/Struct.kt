@@ -54,18 +54,12 @@ class Struct(val name: String, val structs: Structs ) {
       return usableBytes_
    }
    
+   private var sizeBytes_ : Size = 0
+   
    val sizeBytes : Size get() {
       assert( committed )
-      
-      if( fields_.isEmpty()) {
-         return 0
-      }
-      // @DEBUG
-      // val mem = toDebugString(memory)
-      
-      val baseSize = memory.length().toLong()
-      val r = roundUp(baseSize, alignment)
-      return r
+
+      return sizeBytes_      
    }
 
    val alignment : Size get() {
@@ -79,6 +73,26 @@ class Struct(val name: String, val structs: Structs ) {
    fun commit() {
       assert( !committed)
 
+      if( fields_.isEmpty()) {
+         sizeBytes_ = 0
+      }
+      else {
+         // @DEBUG
+         // val mem = toDebugString(memory)
+         
+         var size = memory.length().toLong()
+         size = roundUp(size, alignment)
+         sizeBytes_ = size
+      }
+      
+      committed_ = true
+   }
+   
+   fun commit(sizeBytes: Size) {
+      assert( !committed)
+      assert( memory.length().toLong() <= sizeBytes )
+      
+      sizeBytes_ = sizeBytes      
       committed_ = true
    }
    
@@ -577,7 +591,7 @@ class Struct(val name: String, val structs: Structs ) {
       return field
    }
       
-   fun addDoubleAt(name: String, position: Size) {
+   fun addDoubleAt(name: String, position: Size): DoubleField {
       // NO alignment check: the user might even receive unaligned data that might be
       // legally (though slowly) accessible when unaligned. It is his responsibility
       
@@ -587,6 +601,7 @@ class Struct(val name: String, val structs: Structs ) {
       allocateFieldAt( position, size)
       val field = DoubleField(name, position.toLong())
       addField(field)
+      return field
    }
    
    private fun allocateFieldAt( position: Size, size: Size) {

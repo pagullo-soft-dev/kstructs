@@ -210,7 +210,7 @@ class StructTest {
       val l1 = struct.addLongAt( "l1", 8)
       val f1 = struct.addFloatAt( "f1", 16)
       val bool1 = struct.addBooleanAt( "bool1", 20)
-      struct.commit()
+      struct.commit(32)
       val sp : StructPointer = StructArrayAllocator.unsafeAllocator.allocateArray( struct, 2, true )
       var s1 = sp
       s1[b1] = 17.toByte()
@@ -224,7 +224,7 @@ class StructTest {
       assertEquals( true, bool1Val )
       
       var structSize = struct.sizeBytes
-      assertEquals(24, structSize)
+      assertEquals(32, struct.sizeBytes)
       s1[b1, 1] = 99.toByte()
       s1[l1, 1] = 987L
       s1[f1, 1] = 89.9f

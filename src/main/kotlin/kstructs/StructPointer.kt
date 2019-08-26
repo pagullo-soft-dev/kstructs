@@ -47,6 +47,51 @@ class StructPointer(internal val address: Pointer, val struct: Struct) {
       return this.address.compareTo( v.address)
    }
 
+   fun getValue(field: Field<out Any>): Any {
+      assert( struct.hasField(field))
+      
+      if( field is ShortStringField) {
+         return get(field).toString()
+      }
+      else if( field is BooleanField) {
+         return get(field)
+      }
+      else if( field is ByteField) {
+         return get(field)
+      }
+      else if( field is UByteField) {
+         return get(field)
+      }
+      else if( field is ShortField) {
+         return get(field)
+      }
+      else if( field is UShortField) {
+         return get(field)
+      }
+      else if( field is IntField) {
+         return get(field)
+      }
+      else if( field is UIntField) {
+         return get(field)
+      }
+      else if( field is LongField) {
+         return get(field)
+      }
+      else if( field is ULongField) {
+         return get(field)
+      }
+      else if( field is FloatField) {
+         return get(field)
+      }
+      else if( field is DoubleField) {
+         return get(field)
+      }
+      else {
+         throw NotImplementedError()
+      }
+   }
+
+   
    operator fun get(field: ShortStringField): ShortString {
       assert( struct.hasField(field))
       

@@ -115,7 +115,7 @@ if( supportEclipseJUnitWorkaround ) {
 // List of examples: we create a runXxx task to run every example
 // and set the default run task to run the first example in the list
 // See usage of exampleMainClass()
-val examples = listOf("Simple")   
+val examples = listOf("Simple", "Offsets")   
 
 fun exampleMainClass( exampleName : String) : String {
    return "com.softwarementors.kstructs.examples.${exampleName}ExampleKt"
