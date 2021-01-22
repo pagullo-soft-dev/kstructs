@@ -32,7 +32,7 @@ Here is an example of a simple application that has to deal with off-heap memory
 >         7    : f
 >         8    : b     -> Byte
 
-Here, we have a data structure in which we've got an ``Int`` named ``i`` which starts at offset 0, a ``Float`` named f that starts at offset 4, and a ``Byte`` field named ``b`` whose offset is 8. Now, we can write a program and fill it with offsets all around, enjoying a suffer fest, or we can use **KStructs** as follows. First of all we define the memory structure by creating an ``Struct`` definition for it:
+Here, we have a data structure in which we've got an ``Int`` named ``i`` which starts at offset 0, a ``Float`` named ``f`` that starts at offset 4, and a ``Byte`` field named ``b`` whose offset is 8. Now, we can write a program and fill it with offsets all around, enjoying a suffer fest, or we can use **KStructs** as follows. First of all we define the memory structure by creating an ``Struct`` definition for it:
 
   ``` Kotlin
   // dataAddress offsets
