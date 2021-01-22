@@ -32,7 +32,7 @@ Here is an example of a simple application that has to deal with off-heap memory
 >         7    : f
 >         8    : b     -> Byte
 
-Here, we have a data structure in which we've got an ``Int`` named ``i`` which starts at offset 0, a ``Float`` named f that starts at offset 4, and a ``Byte`` field named ``b`` whose offset is 8. Now, we can write a program and fill it with offsets all around, enjoying a suffer fest, or we can use **KStructs** as follows. First of all we define the memory structure by creating an ``Struct`` definition for it:
+Here, we have a data structure in which we've got an ``Int`` named ``i`` which starts at offset 0, a ``Float`` named ``f`` that starts at offset 4, and a ``Byte`` field named ``b`` whose offset is 8. Now, we can write a program and fill it with offsets all around, enjoying a suffer fest, or we can use **KStructs** as follows. First of all we define the memory structure by creating an ``Struct`` definition for it:
 
   ``` Kotlin
   // dataAddress offsets
@@ -48,7 +48,7 @@ Here, we have a data structure in which we've got an ``Int`` named ``i`` which s
   myStruct.commit(recordSize)
   ```
 
-Of course, we are using constants for offsets, but in any real application you will probably ask the external application for the offsets and structure size with some kind of handshake mechansm. Now that we have a ``myStruct`` ``Struct``, we can use it and the defined fields to access raw memory safely, as follows:
+Of course, we are using constants for offsets, but in any real application you will probably ask the external application for the offsets and structure size with some kind of handshake mechanism. Now that we have a ``myStruct`` ``Struct``, we can use it and the defined fields to access raw memory safely, as follows:
 
 ``` Kotlin
    val itemCount = 5L
@@ -88,9 +88,9 @@ As you can see, dealing with raw memory this way is completely safe and very eas
 
 To see the list of existing examples you can run from the command line, execute ``gradlew tasks --group Application`` from the command line
 
-To run example ``Xxx``, use the existing _runXxxExample_ task executing ``gradlew runXxxExample`` from the command line
+To run example ``Xxx``, use the existing _runXxxExample_ task, executing ``gradlew runXxxExample`` from the command line
 
-All examples source code is located under _src/main/kstructs/examples_: check it.
+All examples' source code is located under _src/main/kstructs/examples_: check it out.
 
 ## License
 
